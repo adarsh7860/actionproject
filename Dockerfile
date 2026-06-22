@@ -1,14 +1,12 @@
-from app import app
+FROM python:3.12-slim
 
+WORKDIR /app
 
-def test_health():
-    client = app.test_client()
-    response = client.get("/health")
-    assert response.status_code == 200
-    assert response.get_json()["status"] == "ok"
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
+COPY . .
 
-def test_index():
-    client = app.test_client()
-    response = client.get("/")
-    assert response.status_code == 200
+EXPOSE 5000
+
+CMD ["python", "app.py"]
